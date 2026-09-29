@@ -1,0 +1,37 @@
+import sys
+
+def solve():
+  
+    s = sys.stdin.read().strip()
+    
+    if not s:
+        return
+
+    seen = 0
+    duplicates = 0
+    
+   
+    for char in s:
+        bit_index = ord(char) - ord('a')
+        if (seen & (1 << bit_index)) != 0:
+            duplicates |= (1 << bit_index)
+        else:
+            seen |= (1 << bit_index)
+            
+    if duplicates == 0:
+        print("No duplicates")
+        return
+        
+    
+    printed = 0
+    result = []
+    for char in s:
+        bit_index = ord(char) - ord('a')
+        if (duplicates & (1 << bit_index)) != 0 and (printed & (1 << bit_index)) == 0:
+            result.append(char)
+            printed |= (1 << bit_index)
+            
+    print(*(result))
+
+if __name__ == '__main__':
+    solve()
