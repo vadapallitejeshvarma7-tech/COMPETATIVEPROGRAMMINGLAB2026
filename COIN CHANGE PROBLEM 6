@@ -1,0 +1,55 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+vector<int> dp;
+
+void solve() {
+    int V, N;
+    cin >> V >> N;
+
+    vector<int> coins(N);
+
+    for (int i = 0; i < N; ++i) {
+        cin >> coins[i];
+    }
+
+
+    coins.erase(
+        remove_if(coins.begin(), coins.end(),
+                  [V](int c) { return c > V; }),
+        coins.end()
+    );
+
+
+    sort(coins.begin(), coins.end());
+    coins.erase(unique(coins.begin(), coins.end()), coins.end());
+
+    const int INF = V + 1;
+
+    dp.assign(V + 1, INF);
+    dp[0] = 0;
+
+
+    for (int coin : coins) {
+        for (int amount = coin; amount <= V; ++amount) {
+            dp[amount] = min(dp[amount],
+                             dp[amount - coin] + 1);
+        }
+    }
+
+    if (dp[V] == INF)
+        cout << -1 << '\n';
+    else
+        cout << dp[V] << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    solve();
+
+    return 0;
+}
