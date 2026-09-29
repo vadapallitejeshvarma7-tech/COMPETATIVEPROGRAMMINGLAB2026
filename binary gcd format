@@ -1,0 +1,34 @@
+import sys
+
+def camel_case_match():
+   
+    input_data = sys.stdin.read().splitlines()
+    if not input_data:
+        return
+        
+    n = int(input_data[0].strip())
+    
+    words = [w.strip() for w in input_data[1].split(',')]
+    pattern = input_data[2].strip()
+    
+    matched_pairs = []
+    
+    for word in words:
+        
+        abbreviation = "".join([char for char in word if char.isupper()])
+        
+       
+        if abbreviation.startswith(pattern):
+            matched_pairs.append((abbreviation, word))
+            
+    
+    matched_pairs.sort()
+    
+    if not matched_pairs:
+        print("No match found")
+    else:
+        
+        print(" ".join([pair[1] for pair in matched_pairs]))
+
+if __name__ == '__main__':
+    camel_case_match()
