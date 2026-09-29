@@ -1,0 +1,18 @@
+import sys
+
+def main():
+    # Read all input from standard input
+    input_data = sys.stdin.read().split()
+    if not input_data:
+        return
+    
+    N = int(input_data[0])
+    K = int(input_data[1])
+    
+    # Toggle the K-th bit
+    result = N ^ (1 << K)
+    
+    print(result)
+
+if __name__ == '__main__':
+    main()
