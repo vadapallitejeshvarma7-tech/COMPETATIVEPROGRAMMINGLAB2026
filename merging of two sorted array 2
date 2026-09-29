@@ -1,0 +1,31 @@
+import sys
+
+def mergeSortedArrays(arr1, arr2):
+    i, j = 0, 0
+    merged = []
+    while i < len(arr1) and j < len(arr2):
+        if arr1[i] <= arr2[j]:
+            merged.append(arr1[i])
+            i += 1
+        else:
+            merged.append(arr2[j])
+            j += 1
+    merged.extend(arr1[i:])
+    merged.extend(arr2[j:])
+    return merged
+
+
+try:
+    
+    size1 = int(input().strip())
+    arr1 = list(map(int, input().strip().split()))
+    size2 = int(input().strip())
+    arr2 = list(map(int, input().strip().split()))
+    
+   
+    result = mergeSortedArrays(arr1, arr2)
+    
+   
+    print(*(result)) 
+except Exception:
+    pass
