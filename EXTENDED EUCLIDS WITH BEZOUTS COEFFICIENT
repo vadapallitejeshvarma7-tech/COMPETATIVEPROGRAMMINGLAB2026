@@ -1,0 +1,57 @@
+import sys
+
+def extended_gcd(a, b):
+    """Returns (gcd, x, y) such that ax + by = gcd"""
+    if a == 0:
+        return b, 0, 1
+    gcd, x1, y1 = extended_gcd(b % a, a)
+    x = y1 - (b // a) * x1
+    y = x1
+    return gcd, x, y
+
+def solve():
+   
+    input_data = sys.stdin.read().split()
+    if not input_data:
+        return
+    
+    A = int(input_data[0])
+    B = int(input_data[1])
+    
+    D, x0, y0 = extended_gcd(A, B)
+    
+    step_x = B // D
+    step_y = A // D
+    
+    
+    k1 = -x0 // step_x
+    k2 = y0 // step_y
+    
+   
+    candidates = []
+    search_range = set([k1 - 2, k1 - 1, k1, k1 + 1, k1 + 2, 
+                        k2 - 2, k2 - 1, k2, k2 + 1, k2 + 2])
+    
+    for k in search_range:
+        x = x0 + k * step_x
+        y = y0 - k * step_y
+        candidates.append((abs(x) + abs(y), x, y))
+        
+   
+    min_sum = min(c[0] for c in candidates)
+    best_candidates = [c for c in candidates if c[0] == min_sum]
+    
+    
+    final_candidates = [c for c in best_candidates if c[1] <= c[2]]
+    
+    
+    if final_candidates:
+        chosen = final_candidates[0]
+    else:
+        chosen = best_candidates[0]
+        
+    print(f"{chosen[1]} {chosen[2]} {D}")
+
+if __name__ == '__main__':
+    solve()
+
