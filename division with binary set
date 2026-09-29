@@ -1,0 +1,55 @@
+import sys
+
+def divide_using_binary_search(x, y, epsilon=1e-7):
+    
+    if y == 0:
+        return "Division by zero"
+    
+    
+    if x == 0:
+        return 0
+    
+    
+    sign = 1 if (x > 0) == (y > 0) else -1
+    
+    A, B = abs(x), abs(y)
+    
+    
+    low = 0.0
+    high = max(1.0, A)
+    
+    
+    while B * high < A:
+        high *= 2.0
+        
+    
+    while (high - low) > epsilon:
+        mid = (low + high) / 2.0
+        current_product = B * mid
+        
+        if abs(current_product - A) < epsilon:
+            low = mid
+            high = mid
+            break
+        elif current_product < A:
+            low = mid
+        else:
+            high = mid
+            
+    result = sign * ((low + high) / 2.0)
+    
+    if abs(result - round(result)) < epsilon:
+        return round(result)
+    return round(result, 6)
+
+def main():
+    input_data = sys.stdin.read().split()
+    if len(input_data) < 2:
+        return
+    x = float(input_data[0])
+    y = float(input_data[1])
+    
+    print(divide_using_binary_search(x, y))
+
+if __name__ == '__main__':
+    main()
