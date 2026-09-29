@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void bucketSort(vector<double>& arr) {
+    int n = arr.size();
+
+    // Create n buckets
+    vector<vector<double>> buckets(n);
+
+    // Put elements into buckets
+    for (double x : arr) {
+        int index = x * n;
+        buckets[index].push_back(x);
+    }
+
+    // Sort individual buckets
+    for (int i = 0; i < n; i++) {
+        sort(buckets[i].begin(), buckets[i].end());
+    }
+
+    // Combine buckets
+    int k = 0;
+    for (int i = 0; i < n; i++) {
+        for (double x : buckets[i]) {
+            arr[k++] = x;
+        }
+    }
+}
+
+int main() {
+    int N;
+    cin >> N;
+
+    vector<double> arr(N);
+
+    for (int i = 0; i < N; i++) {
+        cin >> arr[i];
+    }
+
+    bucketSort(arr);
+
+    cout << fixed << setprecision(2);
+
+    for (int i = 0; i < N; i++) {
+        cout << arr[i];
+        if (i != N - 1)
+            cout << " ";
+    }
+
+    return 0;
+}
