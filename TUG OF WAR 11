@@ -1,0 +1,86 @@
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+from itertools import combinations
+from bisect import bisect_left
+
+def minimum_difference(arr):
+    n = len(arr)
+    total = sum(arr)
+
+    # We need k people in the first group
+    possible_k = [n // 2]
+    if n % 2 == 1:
+        possible_k.append(n // 2 + 1)
+
+    mid = n // 2
+    left = arr[:mid]
+    right = arr[mid:]
+
+    # Generate subset sums grouped by number of elements
+    left_sums = [[] for _ in range(len(left) + 1)]
+    right_sums = [[] for _ in range(len(right) + 1)]
+
+    for mask in range(1 << len(left)):
+        count = 0
+        s = 0
+
+        for i in range(len(left)):
+            if mask & (1 << i):
+                count += 1
+                s += left[i]
+
+        left_sums[count].append(s)
+
+    for mask in range(1 << len(right)):
+        count = 0
+        s = 0
+
+        for i in range(len(right)):
+            if mask & (1 << i):
+                count += 1
+                s += right[i]
+
+        right_sums[count].append(s)
+
+    # Sort right-side sums for binary search
+    for sums in right_sums:
+        sums.sort()
+
+    answer = float('inf')
+
+    for k in possible_k:
+
+        # Number of people selected from left + right = k
+        for left_count in range(len(left) + 1):
+            right_count = k - left_count
+
+            if right_count < 0 or right_count > len(right):
+                continue
+
+            for left_sum in left_sums[left_count]:
+
+                # We want:
+                # |total - 2 * group_sum|
+                #
+                # group_sum should be close to total / 2
+                target = total / 2 - left_sum
+
+                sums = right_sums[right_count]
+                pos = bisect_left(sums, target)
+
+                # Check the closest values
+                if pos < len(sums):
+                    group_sum = left_sum + sums[pos]
+                    answer = min(answer, abs(total - 2 * group_sum))
+
+                if pos > 0:
+                    group_sum = left_sum + sums[pos - 1]
+                    answer = min(answer, abs(total - 2 * group_sum))
+
+    return answer
+
+
+# Input
+n = int(input())
+arr = list(map(int, input().split()))
+
+print(minimum_difference(arr))
