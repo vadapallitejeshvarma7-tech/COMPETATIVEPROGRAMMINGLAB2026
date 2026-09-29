@@ -1,0 +1,40 @@
+import sys
+
+
+cache = {1: 1}
+
+def get_cycle_length(n):
+
+    if n in cache:
+        return cache[n]
+
+    if n % 2 == 0:
+        next_n = n // 2
+    else:
+        next_n = 3 * n + 1
+    cache[n] = 1 + get_cycle_length(next_n)
+    return cache[n]
+def solve():
+    input_data = sys.stdin.read().split()
+    if not input_data:
+        return
+    for idx in range(0, len(input_data), 2):
+        if idx + 1 >= len(input_data):
+            break
+            
+        orig_i = int(input_data[idx])
+        orig_j = int(input_data[idx + 1])
+        
+        
+        i, j = min(orig_i, orig_j), max(orig_i, orig_j)
+        
+        
+        max_cycle_length = 0
+        for n in range(i, j + 1):
+            max_cycle_length = max(max_cycle_length, get_cycle_length(n))
+            
+        
+        print(f"{orig_i} {orig_j} {max_cycle_length}")
+
+if __name__ == '__main__':
+    solve()
